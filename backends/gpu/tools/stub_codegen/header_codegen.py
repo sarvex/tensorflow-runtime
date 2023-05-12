@@ -65,7 +65,7 @@ def main():
     if enum == typedef:
       return  # Pure enum has already been visited.
 
-    if not any(x in config.get('enums', []) for x in [enum, typedef]):
+    if all(x not in config.get('enums', []) for x in [enum, typedef]):
       return
 
     if typedef:

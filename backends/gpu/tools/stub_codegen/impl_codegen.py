@@ -57,7 +57,7 @@ def main():
 
     arg_names = [arg.spelling for arg in cursor.get_arguments()]
     implementation = function_impl.format(
-        cursor.spelling, ', '.join(['"%s"' % cursor.spelling] + arg_names))
+        cursor.spelling, ', '.join([f'"{cursor.spelling}"'] + arg_names))
 
     args.output.write('%s {%s\n}\n\n' % (declaration, implementation))
 

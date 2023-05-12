@@ -29,8 +29,7 @@ def _indent_lines(s, indentation):
   """Indent lines in s with the given indentation."""
   lines = []
   for line in s.strip().split('\n'):
-    stripped = line.strip()
-    if stripped:
+    if stripped := line.strip():
       lines.append(' ' * indentation + stripped)
     else:
       lines.append(stripped)
@@ -87,7 +86,7 @@ def gen_benchmark_mlir_main(generator_map):
 
   for test in args.tests:
     if test not in generator_map:
-      raise RuntimeError('Unknown test case {}'.format(test))
+      raise RuntimeError(f'Unknown test case {test}')
 
     generator = generator_map[test]
     print(generator(args.num_kernels))

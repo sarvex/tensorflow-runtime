@@ -44,6 +44,7 @@ Usage:
   $ bazel-bin/$bef_perf/bef_perf bazel-bin/$bef_perf/*.mlir
 """
 
+
 from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
@@ -55,8 +56,10 @@ import sys
 from mlir_tests.bef_perf.benchmark_utils import Env  # from @tf_runtime
 
 
-assert sys.version_info >= (3, 5), \
-    'Detected Python version %s. Please use Python >= 3.5.' % sys.version
+assert sys.version_info >= (
+    3,
+    5,
+), f'Detected Python version {sys.version}. Please use Python >= 3.5.'
 
 BUILD_DIR = 'bazel-bin'
 
@@ -82,9 +85,9 @@ def print_perf_results(results, cpu_info):
   if not results:
     return
 
-  print('CPU Info: {}'.format(cpu_info['cpu_info']))
-  print('Num cores: {}'.format(cpu_info['num_cpus']))
-  print('Frequency: {} MHz'.format(cpu_info['mhz_per_cpu']))
+  print(f"CPU Info: {cpu_info['cpu_info']}")
+  print(f"Num cores: {cpu_info['num_cpus']}")
+  print(f"Frequency: {cpu_info['mhz_per_cpu']} MHz")
 
   metrics = None
   row_format = None
@@ -157,9 +160,9 @@ def main():
   print('-' * 40)
 
   # Merge, format, and print the benchmark results.
-  merged_results = dict()
+  merged_results = {}
   for r in result_list:
-    merged_results.update(r)
+    merged_results |= r
 
   if not merged_results:
     print(

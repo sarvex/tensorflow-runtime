@@ -31,14 +31,14 @@ def main(args):
     workspace_data = f.read()
 
   commit = args[0][:40]
-  workspace_data, count = COMMIT_PATTERN.subn('EIGEN_COMMIT = "%s"' % commit,
+  workspace_data, count = COMMIT_PATTERN.subn(f'EIGEN_COMMIT = "{commit}"',
                                               workspace_data)
   if not count:
     print('Failed to replace commit.', file=sys.stderr)
     sys.exit(1)
 
   sha256 = args[1][:64]
-  workspace_data, count = SHA256_PATTERN.subn('EIGEN_SHA256 = "%s"' % sha256,
+  workspace_data, count = SHA256_PATTERN.subn(f'EIGEN_SHA256 = "{sha256}"',
                                               workspace_data)
   if not count:
     print('Failed to replace sha256.', file=sys.stderr)
@@ -51,7 +51,7 @@ def main(args):
   with open(workspace_file, 'w') as f:
     f.write(workspace_data)
 
-  print('Updated ' + workspace_file, file=sys.stderr)
+  print(f'Updated {workspace_file}', file=sys.stderr)
 
 
 if __name__ == '__main__':

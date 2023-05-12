@@ -54,12 +54,7 @@ class Env:
       from bef_executor. example:
       {"fully_serial_100" : {"Min(us)" : "252"}, {"50%(us)" : "259"}}
     """
-    cmd = ('{} -mlir-to-bef | {} {} --host_allocator_type={} '
-           '--work_queue_type={}').format(self.tfrt_translate,
-                                          self.bef_executor,
-                                          additional_executor_flags,
-                                          self.host_allocator_type,
-                                          self.work_queue_type)
+    cmd = f'{self.tfrt_translate} -mlir-to-bef | {self.bef_executor} {additional_executor_flags} --host_allocator_type={self.host_allocator_type} --work_queue_type={self.work_queue_type}'
     proc = subprocess.run(
         cmd,
         input=in_str.encode(STR_ENCODING),
@@ -79,20 +74,20 @@ class Env:
       mhz_per_cpu, cache_size (dict of cache sizes L1, L2, ...)
     """
     info = cpuinfo.get_cpu_info()
-    cpu_info = {}
-    cpu_info['cpu_info'] = info['brand']
-    cpu_info['num_cpus'] = info['count']
-    # Assuming frequencies for all cores are the same.
-    cpu_info['mhz_per_cpu'] = info['hz_advertised_raw'][0] / 1.0e6
+    cpu_info = {
+        'cpu_info': info['brand'],
+        'num_cpus': info['count'],
+        'mhz_per_cpu': info['hz_advertised_raw'][0] / 1.0e6,
+    }
     l1_cache_size = re.match(r'(\d+)', str(info.get('l1_cache_size', '')))
     l2_cache_size = re.match(r'(\d+)', str(info.get('l2_cache_size', '')))
     cpu_info['cache_size'] = {}
     if l1_cache_size:
       # If a value is returned, it's in KB.
-      cpu_info['cache_size']['L1'] = int(l1_cache_size.group(0)) * 1024
+      cpu_info['cache_size']['L1'] = int(l1_cache_size[0]) * 1024
     if l2_cache_size:
       # If a value is returned, it's in KB.
-      cpu_info['cache_size']['L2'] = int(l2_cache_size.group(0)) * 1024
+      cpu_info['cache_size']['L2'] = int(l2_cache_size[0]) * 1024
 
     return cpu_info
 
